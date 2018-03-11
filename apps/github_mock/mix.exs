@@ -42,7 +42,8 @@ defmodule GithubMock.Mixfile do
   defp deps do
     [
       {:stash, "~> 1.0.0", only: [:test]},
-      {:httpoison, "~> 0.11.0"},
+      {:httpoison, "~> 1.0.0"},
+      {:poison, "~> 3.1.0"},
       {:env_helper, "~> 0.0.5"}
     ]
   end

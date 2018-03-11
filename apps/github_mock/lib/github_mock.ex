@@ -5,6 +5,9 @@ defmodule GithubMock do
 
   use GenServer
   alias GithubMock.Sets
+  alias GithubMock.Fixtures.Events
+
+  defstruct [:users, :events, :webhook_url, :last_event]
 
   def start_link(state) do
     GenServer.start_link(__MODULE__, state, name: __MODULE__)
@@ -27,9 +30,11 @@ defmodule GithubMock do
   #select random user from state, select random event from state, send to endpoint, loop
   def handle_info(:send_event, state) do
     user = Enum.random(Sets.users)
-    event_type = Enum.random(Sets.events)
-    Sets.http.post(state.webhook_url, "", %{"X-GitHub-Event" => "#{event_type}"})
+    event_type = Enum.random(Sets.events -- [state.last_event])
+    event = Events.get_event(event_type, user) |> Poison.encode!
+    Sets.http.post(state.webhook_url, event, %{"X-GitHub-Event" => "#{event_type}", "Content-Type" => "application/json"})
+    Process.send_after(self(), :send_event, Enum.random(100..999))
 
-    {:noreply, state}
+    {:noreply, %{state | last_event: event_type}}
   end
 end

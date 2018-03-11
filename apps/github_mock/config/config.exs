@@ -20,9 +20,8 @@ use Mix.Config
 #
 #     config :logger, level: :info
 #
-config :github_mock, http: HTTPoison.Base
 config :github_mock, users: ["frank", "bob", "sue", "matt", "shannon", "adam"]
-config :github_mock, events: [:push, :pull_request_review_comment, :watch, :create, :other]
+config :github_mock, events: [:push, :pull_request_review_comment, :watch, :create, :installation, :installation_repositories]
 config :github_mock, webhook_url: "localhost:11011/github_scorer"
 # It is also possible to import configuration files, relative to this
 # directory. For example, you can emulate configuration per environment

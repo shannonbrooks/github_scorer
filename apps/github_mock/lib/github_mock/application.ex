@@ -5,10 +5,10 @@ defmodule GithubMock.Application do
 
   def start(_type, _args) do
     children = [
-      {GithubMock,
-        %{users: Application.get_env(:github_mock, :users),
-          events: Application.get_env(:github_mock, :events),
-          webhook_url: Application.get_env(:github_mock, :webhook_url)}}
+      {GithubMock, %GithubMock{
+        users: Application.get_env(:github_mock, :users),
+        events: Application.get_env(:github_mock, :events),
+        webhook_url: Application.get_env(:github_mock, :webhook_url)}}
     ]
 
     opts = [strategy: :one_for_one, name: GithubMock.Supervisor]
