@@ -9,6 +9,8 @@ use Mix.Config
 config :scorer,
   namespace: Scorer
 
+config :scorer, events: ["push", "pull_request_review_comment", "watch", "create"]
+
 # Configures the endpoint
 config :scorer, ScorerWeb.Endpoint,
   url: [host: "localhost"],

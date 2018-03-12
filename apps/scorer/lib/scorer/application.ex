@@ -11,7 +11,7 @@ defmodule Scorer.Application do
       # Start the endpoint when the application starts
       supervisor(ScorerWeb.Endpoint, []),
       # Start your own worker by calling: Scorer.Worker.start_link(arg1, arg2, arg3)
-      # worker(Scorer.Worker, [arg1, arg2, arg3]),
+      worker(Scorer, [])
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

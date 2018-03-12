@@ -42,6 +42,8 @@ defmodule Scorer.Mixfile do
       {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
+      {:faker, "~> 0.9", only: [:test]},
+      {:env_helper, "~> 0.0.5"},
       {:github_mock, in_umbrella: true}
     ]
   end

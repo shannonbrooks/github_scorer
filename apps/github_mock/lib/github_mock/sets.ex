@@ -6,4 +6,3 @@ defmodule GithubMock.Sets do
   app_env(:webhook_url, [:github_mock, :webhook_url], "localhost:11011/github_scorer")
   app_env(:http, [:github_mock, :http], GithubMock.Clients.Http)
 end
-
