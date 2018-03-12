@@ -30,7 +30,7 @@ mix phx.server
 
 Available endpoints:
 
-GET http://localhost:11012/events/scores/ -- retrieves all user scores
-GET http://localhost:11012/events/scores/:user -- retrieves a single user's score, example: http://localhost:11012/events/scores/matt)
-POST http://localhost:11012/events/scores/reset -- resets all scores
+    GET http://localhost:11012/events/scores/ -- retrieves all user scores
+    GET http://localhost:11012/events/scores/:user -- retrieves a single user's score, example: http://localhost:11012/events/scores/matt)
+    POST http://localhost:11012/events/scores/reset -- resets all scores
 
