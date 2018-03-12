@@ -32,6 +32,12 @@ defmodule Scorer do
     end)
   end
 
+  def scores() do
+    Agent.get(__MODULE__, fn(state) ->
+      state
+    end)
+  end
+
   def clear_scores() do
     Agent.update(__MODULE__, fn(state) ->
       %{}

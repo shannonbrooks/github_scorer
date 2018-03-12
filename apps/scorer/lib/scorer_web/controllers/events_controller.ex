@@ -12,9 +12,16 @@ defmodule ScorerWeb.EventsController do
   end
 
   def user_scores(conn, params) do
+    scores = Scorer.scores() |> transform()
     conn
     |> put_status(:ok)
-    |> json(%{})
+    |> json(%{"items" => scores})
+  end
+
+  defp transform(scores) do
+    Enum.reduce(scores, [], fn({user, score}, acc) ->
+      [%{"user" => user, "score" => score} | acc]
+    end)
   end
 
   defp user(params) do

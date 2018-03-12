@@ -11,8 +11,8 @@ defmodule ScorerWeb.EventsControllerTest do
 
   def user_scores(context) do
     users = Enum.reduce(1..5, [], fn(_i, acc) -> [Faker.Name.first_name() |> String.downcase() | acc] end)
-    initial_scores = Enum.reduce(users, %{}, fn(user, acc) ->
-      Map.put(acc, user, 0)
+    initial_scores = Enum.map(users, fn(user) ->
+      %{"user" => user, "score" => 0}
     end)
     user_scores = Enum.reduce(users, initial_scores, fn(user, acc) ->
       event_type_1 = Sets.events
@@ -30,10 +30,11 @@ defmodule ScorerWeb.EventsControllerTest do
       |> post("/events/", event_1)
       context.conn
       |> put_req_header("content-type", "application/json")
-      |> put_req_header("x-github-event", event_type_1 |> to_string())
+      |> put_req_header("x-github-event", event_type_2 |> to_string())
       |> post("/events/", event_2)
-      score = Map.get(acc, user) + Scorer.score(event_type_1) + Scorer.score(event_type_2)
-      Map.put(acc, user, score)
+      {[%{"user" => ^user, "score" => current_score}], rest} = Enum.split_with(acc, fn(i) -> i["user"] == user end)
+      score = current_score + Scorer.score(event_type_1) + Scorer.score(event_type_2)
+      [%{"user" => user, "score" => score} | rest]
     end)
     Map.merge(context, %{user_scores: user_scores})
   end
@@ -48,7 +49,12 @@ defmodule ScorerWeb.EventsControllerTest do
 
     test "returns the user scores as json", context do
       conn = get(context.conn, "/events/scores")
-      assert json_response(conn, 200) == context.user_scores
+      assert conn.status == 200
+      response = json_response(conn, 200)
+      assert Enum.count(response["items"]) == Enum.count(context.user_scores)
+      Enum.each(response["items"], fn(i) ->
+        assert Enum.member?(context.user_scores, i)
+      end)
     end
   end
 
