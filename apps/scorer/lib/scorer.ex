@@ -39,7 +39,7 @@ defmodule Scorer do
   end
 
   def clear_scores() do
-    Agent.update(__MODULE__, fn(state) ->
+    Agent.update(__MODULE__, fn(_state) ->
       %{}
     end)
   end

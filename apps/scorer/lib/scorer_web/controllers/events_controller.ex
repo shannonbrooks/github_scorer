@@ -11,11 +11,24 @@ defmodule ScorerWeb.EventsController do
     |> send_resp(:no_content, "")
   end
 
-  def user_scores(conn, params) do
+  def user_scores(conn, _params) do
     scores = Scorer.scores() |> transform()
     conn
     |> put_status(:ok)
     |> json(%{"items" => scores})
+  end
+
+  def user_score(conn, %{"user" => user}) do
+    score = Scorer.user_score(user)
+    conn
+    |> put_status(:ok)
+    |> json(%{"user" => user, "score" => score})
+  end
+
+  def reset_scores(conn, _params) do
+    Scorer.clear_scores()
+    conn
+    |> send_resp(:no_content, "")
   end
 
   defp transform(scores) do

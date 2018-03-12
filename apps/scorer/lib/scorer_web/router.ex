@@ -24,6 +24,8 @@ defmodule ScorerWeb.Router do
     pipe_through :api
 
     post "/", EventsController, :process_event
+    post "/scores/reset", EventsController, :reset_scores
+    get "/scores/:user", EventsController, :user_score
     get "/scores", EventsController, :user_scores
   end
 end

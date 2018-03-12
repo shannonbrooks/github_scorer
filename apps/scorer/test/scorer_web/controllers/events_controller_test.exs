@@ -36,7 +36,7 @@ defmodule ScorerWeb.EventsControllerTest do
       score = current_score + Scorer.score(event_type_1) + Scorer.score(event_type_2)
       [%{"user" => user, "score" => score} | rest]
     end)
-    Map.merge(context, %{user_scores: user_scores})
+    Map.merge(context, %{user_scores: user_scores, users: users})
   end
 
   describe "GET /events/scores" do
@@ -55,6 +55,50 @@ defmodule ScorerWeb.EventsControllerTest do
       Enum.each(response["items"], fn(i) ->
         assert Enum.member?(context.user_scores, i)
       end)
+    end
+  end
+
+  describe "GET /events/scores/:user" do
+    setup :user_scores
+
+    test "returns 200 status", %{conn: conn, users: users} do
+      user = Enum.random(users)
+      conn = get(conn, "/events/scores/#{user}")
+      assert conn.status == 200
+    end
+
+    test "unknown users have score 0", context do
+      conn = get(context.conn, "/events/scores/#{context.user}")
+      assert json_response(conn, 200) == %{"user" => context.user, "score" => 0}
+    end
+
+    test "returns the user score as json", context do
+      user = Enum.random(context.users)
+      conn = get(context.conn, "/events/scores/#{user}")
+      assert conn.status == 200
+      expected_response = Enum.find(context.user_scores, fn(s) ->
+        s["user"] == user
+      end)
+      assert json_response(conn, 200) == expected_response
+    end
+  end
+
+  describe "POST /events/scores/reset" do
+    setup :user_scores
+
+    test "returns 204 status", %{conn: conn} do
+      conn = conn
+             |> put_req_header("content-type", "application/json")
+             |> post("/events/scores/reset", "")
+      assert conn.status == 204
+    end
+
+    test "clears scores", %{conn: conn} do
+      refute Scorer.scores == %{}
+      conn
+      |> put_req_header("content-type", "application/json")
+      |> post("/events/scores/reset", "")
+      assert Scorer.scores == %{}
     end
   end
 
