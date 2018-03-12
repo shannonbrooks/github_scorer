@@ -1,6 +1,6 @@
 # GithubScorer
 
-##About
+## About
 
 GithubScorer is an umbrella app consisting of a mock Github Server which posts events to a configurable webhook url, and a Scorer app which tracks scores based on events received per user.
 
@@ -14,7 +14,7 @@ Events are scored as follows:
 | CreateEvent | 2 |
 | All other events | 1 |
 
-##Usage
+## Usage
 
 git clone https://github.com/shannonbrooks/github_scorer.git
 cd github_scorer
