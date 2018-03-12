@@ -16,9 +16,9 @@ Events are scored as follows:
 
 ## Usage
 
-git clone https://github.com/shannonbrooks/github_scorer.git
-cd github_scorer
-mix deps.get
+    git clone https://github.com/shannonbrooks/github_scorer.git
+    cd github_scorer
+    mix deps.get
 
 To run tests:
 
