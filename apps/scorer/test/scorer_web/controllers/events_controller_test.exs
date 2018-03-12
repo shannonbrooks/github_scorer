@@ -10,7 +10,7 @@ defmodule ScorerWeb.EventsControllerTest do
   end
 
   def user_scores(context) do
-    users = Enum.reduce(1..5, [], fn(_i) -> Faker.Name.first_name() |> String.downcase() end)
+    users = Enum.reduce(1..5, [], fn(_i, acc) -> [Faker.Name.first_name() |> String.downcase() | acc] end)
     initial_scores = Enum.reduce(users, %{}, fn(user, acc) ->
       Map.put(acc, user, 0)
     end)
@@ -24,11 +24,11 @@ defmodule ScorerWeb.EventsControllerTest do
 
       event_1 = Events.get_event(event_type_1, user)
       event_2 = Events.get_event(event_type_2, user)
-      conn
+      context.conn
       |> put_req_header("content-type", "application/json")
       |> put_req_header("x-github-event", event_type_1 |> to_string())
       |> post("/events/", event_1)
-      conn
+      context.conn
       |> put_req_header("content-type", "application/json")
       |> put_req_header("x-github-event", event_type_1 |> to_string())
       |> post("/events/", event_2)
@@ -39,7 +39,7 @@ defmodule ScorerWeb.EventsControllerTest do
   end
 
   describe "GET /events/scores" do
-    setup [:user_scores]
+    setup :user_scores
 
     test "returns 200 status", %{conn: conn} do
       conn = get(conn, "/events/scores")
