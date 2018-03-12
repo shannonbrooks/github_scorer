@@ -22,11 +22,11 @@ Events are scored as follows:
 
 To run tests:
 
-mix test
+    mix test
 
 To run server:
 
-mix phx.server
+    mix phx.server
 
 Available endpoints:
 
